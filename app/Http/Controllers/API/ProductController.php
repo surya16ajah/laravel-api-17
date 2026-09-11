@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -16,22 +17,24 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->paginate(10);
-        return response()->json(new ProductCollection($products),
-        Response::HTTP_OK);
+        $products = Product::with('kategori')->latest()->paginate(10);
+        return response()->json(
+            ProductResource::collection($products),
+            Response::HTTP_OK
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request)
-
     {
         $product = Product::create($request->validated());
+
         return response()->json([
             'status' => true,
-            'message' => 'Product created successfully',
-            'data' => new ProductResource($product),
+            'message' => 'Data produk berhasil disimpan',
+            'data' => new ProductResource($product)
         ], Response::HTTP_CREATED);
     }
 
@@ -49,11 +52,12 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $product->update($request->validated());
+
         return response()->json([
             'status' => true,
-            'message' => 'Product updated successfully',
-            'data' => new ProductResource($product),
-        ], Response::HTTP_OK);
+            'message' => 'Data produk berhasil disimpan',
+            'data' => new ProductResource($product)
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -62,9 +66,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+
         return response()->json([
             'status' => true,
-            'message' => 'Product deleted successfully',
+            'message' => 'Data produk berhasil dihapus',
         ], Response::HTTP_OK);
     }
 }
