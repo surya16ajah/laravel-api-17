@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\ProductController;
+<<<<<<< HEAD
 use App\Http\Controllers\Api\AuthController;
+=======
+use App\Http\Controllers\Api\KaterogiController;
+>>>>>>> be5a6e79d4f2bd30130c10887e9866f90cfff3cd
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
